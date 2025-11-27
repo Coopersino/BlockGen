@@ -33,7 +33,7 @@ function parseWorkbook(filePath) {
 
 function showUsage() {
   console.log('Использование: node src/index.js <путь_к_xls> [путь_к_html]');
-  console.log('Если путь к html не указан, результат будет выведен в stdout.');
+  console.log('Если путь к html не указан, файл создается рядом с исходной таблицей.');
 }
 
 function main() {
@@ -55,13 +55,12 @@ function main() {
     const rows = parseWorkbook(absoluteInputPath);
     const html = buildHtmlDocument(rows, path.basename(inputPath));
 
-    if (outputPath) {
-      const absoluteOutputPath = path.resolve(process.cwd(), outputPath);
-      fs.writeFileSync(absoluteOutputPath, html, 'utf8');
-      console.log(`Создан файл ${absoluteOutputPath}. Количество блоков: ${rows.length}`);
-    } else {
-      process.stdout.write(html);
-    }
+    const absoluteOutputPath = outputPath
+      ? path.resolve(process.cwd(), outputPath)
+      : path.join(path.parse(absoluteInputPath).dir, `${path.parse(absoluteInputPath).name}.html`);
+
+    fs.writeFileSync(absoluteOutputPath, html, 'utf8');
+    console.log(`Создан файл ${absoluteOutputPath}. Количество блоков: ${rows.length}`);
   } catch (error) {
     console.error(`Ошибка: ${error.message}`);
     process.exit(1);
