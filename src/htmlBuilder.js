@@ -9,10 +9,33 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+function wrapCellText(value) {
+  const words = String(value)
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (words.length === 0) {
+    return '';
+  }
+
+  return words
+    .map((word, index) => {
+      const suffix = index < words.length - 1 ? '&nbsp;' : '';
+      return `<span style="white-space: nowrap;">${escapeHtml(word)}${suffix}</span>`;
+    })
+    .join('\n            ');
+}
+
 function renderField(label, value) {
+  const wrappedText = wrapCellText(value ?? '');
+
   return `      <div class="data-block__field">
         <dt class="data-block__label">${escapeHtml(label)}</dt>
-        <dd class="data-block__value">${escapeHtml(value)}</dd>
+        <dd class="data-block__value">
+          <p style="margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; font-size: 19px; line-height: 22px; color: #333f48; font-weight: 400;">
+            ${wrappedText || '&nbsp;'}
+          </p>
+        </dd>
       </div>`;
 }
 
