@@ -1,11 +1,14 @@
 {
   "name": "block-gen",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Конвертация таблиц XLS/XLSX в HTML-блоки",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "convert": "node src/index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
 }
